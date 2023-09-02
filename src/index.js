@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const db = require("../database/models/index");
 
 const auth = require("./routes/auth");
 
@@ -15,9 +16,12 @@ app.use(bodyParser.json());
 // routes
 app.use("/auth", auth);
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+    const user_type = await db.sequelize.model("user_type").findAll();
+    console.dir(user_type);
     res.status(200).json({
         success: true,
+        user_type,
     });
 });
 
