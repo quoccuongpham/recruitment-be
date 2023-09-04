@@ -8,6 +8,7 @@ module.exports = {
         host: "127.0.0.1",
         port: 5432,
         dialect: "postgres",
+        logging: false,
         dialectOptions: {
             bigNumberStrings: true,
         },
@@ -30,6 +31,7 @@ module.exports = {
         host: process.env.PROD_DB_HOSTNAME,
         port: process.env.PROD_DB_PORT,
         dialect: "postgres",
+        logging: false,
         dialectOptions: {
             bigNumberStrings: true,
         },
