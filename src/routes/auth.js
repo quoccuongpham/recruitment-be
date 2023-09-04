@@ -1,11 +1,50 @@
 const router = require("express").Router();
 const argon = require("argon2");
+const jwt = require("jsonwebtoken");
 const db = require("../../database/models/index");
-router.post("/login", (req, res) => {
-    console.log(req.body);
-    res.json({
-        success: true,
-    });
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user_account = await db.sequelize
+            .model("user_account")
+            .findOne({ where: { email: email } });
+        if (user_account !== null) {
+            const check_password = await argon.verify(
+                user_account.dataValues.password,
+                password
+            );
+            if (check_password) {
+                const token = jwt.sign(
+                    { id: user_account.dataValues.id },
+                    process.env.SECRET_JWT
+                );
+                res.cookie("token", token, {
+                    signed: true,
+                    maxAge: 1000 * 3600 * 24,
+                    httpOnly: true,
+                });
+                return res.json({
+                    success: true,
+                    message: "login successfully",
+                });
+            } else {
+                return res.json({
+                    success: false,
+                    message: "Wrong email or password",
+                });
+            }
+        } else {
+            return res.json({
+                success: false,
+                message: "Wrong email or password",
+            });
+        }
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "Error",
+        });
+    }
 });
 
 router.post("/register", async (req, res) => {
