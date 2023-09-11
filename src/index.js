@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 require("dotenv").config();
 const db = require("../database/models/index");
 
@@ -12,7 +13,9 @@ app.use(morgan("dev"));
 app.use(cookieParser(process.env.SECRET_COOKIE));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(
+    cors({ origin: true, credentials: true, exposedHeaders: ["set-cookie"] })
+);
 // routes
 app.use("/auth", auth);
 

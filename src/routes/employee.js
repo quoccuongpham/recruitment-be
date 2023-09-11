@@ -1,10 +1,8 @@
 const router = require("express").Router();
-const argon = require("argon2");
-const jwt = require("jsonwebtoken");
 const db = require("../../database/models/index");
 
 const Response = require("../utils/Response");
-router.post("/login", async (req, res) => {
+router.post("/create", async (req, res) => {
     const { email, password } = req.body;
     try {
         const user_account = await db.sequelize
