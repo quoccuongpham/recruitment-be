@@ -10,6 +10,8 @@ router.post("/login", async (req, res) => {
         const user_account = await db.sequelize
             .model("user_account")
             .findOne({ where: { email: email } });
+
+        console.log(user_account);
         if (user_account !== null) {
             const check_password = await argon.verify(
                 user_account.dataValues.password,
@@ -17,7 +19,10 @@ router.post("/login", async (req, res) => {
             );
             if (check_password) {
                 const token = jwt.sign(
-                    { id: user_account.dataValues.id },
+                    {
+                        id: user_account.dataValues.id,
+                        user_type_id: user_account.dataValues.user_type_id,
+                    },
                     process.env.SECRET_JWT,
                     { expiresIn: 86400000 }
                 );
@@ -29,6 +34,7 @@ router.post("/login", async (req, res) => {
                 return res.json({
                     success: true,
                     message: "login successfully",
+                    user_type_id: user_account.dataValues.user_type_id,
                 });
             } else {
                 return res.json({
@@ -95,7 +101,10 @@ router.get("/", async (req, res) => {
                 .model("user_account")
                 .findOne({ where: { id: id } });
             return res.json(
-                new Response(true, "thanh conng", user_info.dataValues)
+                new Response(true, "thanh conng", {
+                    email: user_info.dataValues.email,
+                    user_type_id: user_info.dataValues.user_type_id,
+                })
             );
         } catch (error) {
             return res.json(new Response(false, "cookie khong con hieu luc"));

@@ -59,7 +59,9 @@ module.exports = function(sequelize, DataTypes) {
     sequelize,
     tableName: 'job_post',
     schema: 'public',
-    timestamps: false,
+    timestamps: true,
+    createdAt: "created_date",
+    updatedAt: false,
     indexes: [
       {
         name: "job_post_pk",

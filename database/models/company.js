@@ -9,6 +9,14 @@ module.exports = function (sequelize, DataTypes) {
                 allowNull: false,
                 primaryKey: true,
             },
+            user_account_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: "user_account",
+                    key: "id",
+                },
+            },
             company_name: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
@@ -23,7 +31,7 @@ module.exports = function (sequelize, DataTypes) {
             },
             company_website_url: {
                 type: DataTypes.STRING(500),
-                allowNull: false,
+                allowNull: true,
             },
         },
         {

@@ -7,6 +7,7 @@ require("dotenv").config();
 const db = require("../database/models/index");
 
 const auth = require("./routes/auth");
+const employer = require("./routes/employer");
 
 const app = express();
 app.use(morgan("dev"));
@@ -18,6 +19,7 @@ app.use(
 );
 // routes
 app.use("/auth", auth);
+app.use("/employer", employer);
 
 app.get("/", async (req, res) => {
     const user_type = await db.sequelize.model("user_type").findAll();
