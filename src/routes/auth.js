@@ -90,7 +90,6 @@ router.post("/register", async (req, res) => {
 
 // get info user
 router.get("/", async (req, res) => {
-    console.log(req.signedCookies.token);
     if (!req.signedCookies.token) {
         return res.json(new Response(false));
     } else {
