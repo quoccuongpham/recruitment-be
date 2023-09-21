@@ -8,6 +8,7 @@ const db = require("../database/models/index");
 
 const auth = require("./routes/auth");
 const employer = require("./routes/employer");
+const employee = require("./routes/employee");
 
 const app = express();
 app.use(morgan("dev"));
@@ -20,6 +21,7 @@ app.use(
 // routes
 app.use("/auth", auth);
 app.use("/employer", employer);
+app.use("/employee", employee);
 
 app.get("/", async (req, res) => {
     const user_type = await db.sequelize.model("user_type").findAll();
