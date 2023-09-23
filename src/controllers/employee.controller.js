@@ -9,6 +9,7 @@ exports.findJob = async (req, res) => {
         .model("job_post")
         .findOne({ where: { id: req.params.id } });
     const {
+        id,
         company_id,
         job_type_id,
         job_location_id,
@@ -41,6 +42,7 @@ exports.findJob = async (req, res) => {
             }, ${city}, ${country}`;
 
             return res.json({
+                id,
                 date_expire,
                 job_description,
                 job_title,
@@ -56,3 +58,8 @@ exports.findJob = async (req, res) => {
             });
         });
 };
+
+exports.findAllCompany = async (req, res) => {
+    const company = await db.sequelize.model("company").findAll();
+    res.json(company);
+}
