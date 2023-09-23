@@ -1,4 +1,5 @@
 const db = require("../../database/models/index");
+
 exports.findAllJob = async (req, res) => {
     const jobs = await db.sequelize.model("job_post").findAll();
     res.json(jobs);
@@ -62,4 +63,27 @@ exports.findJob = async (req, res) => {
 exports.findAllCompany = async (req, res) => {
     const company = await db.sequelize.model("company").findAll();
     res.json(company);
+}
+
+exports.applyJob = async (req, res) => {
+    try {
+        const user_info = req.user_info;
+        const current_time = Date.now();
+        const job_apply = db.sequelize.model("job_post_activity").build({
+            user_account_id: user_info.id,
+            job_post_id: req.body.id_job,
+            apply_date: current_time
+        })
+        await job_apply.save();
+        return res.json({
+            success: true,
+            message: "apply job successfully"
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            success: false,
+            message: "Internal error"
+        })
+    }
 }

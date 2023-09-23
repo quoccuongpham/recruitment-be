@@ -5,5 +5,9 @@ const controller = require("../controllers/employee.controller");
 
 router.route("/jobs").get(controller.findAllJob);
 router.route("/job-detail/:id").get(controller.findJob);
+router.route("/company").get(controller.findAllJob);
+
+router.post("/apply", check_cookie, controller.applyJob);
+
 
 module.exports = router;
