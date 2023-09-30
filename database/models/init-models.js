@@ -169,12 +169,12 @@ function initModels(sequelize) {
         foreignKey: "user_account_id",
     });
     seeker_profile.belongsTo(user_account, {
-        as: "user_acount",
-        foreignKey: "user_acount_id",
+        as: "user_account",
+        foreignKey: "user_account_id",
     });
     user_account.hasOne(seeker_profile, {
         as: "seeker_profile",
-        foreignKey: "user_acount_id",
+        foreignKey: "user_account_id",
     });
     user_log.belongsTo(user_account, {
         as: "user_acount",

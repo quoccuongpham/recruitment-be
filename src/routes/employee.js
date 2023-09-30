@@ -9,5 +9,6 @@ router.route("/company").get(controller.findAllJob);
 
 router.post("/apply", check_cookie, controller.applyJob);
 
+router.route("/profile").get(check_cookie, controller.getProfile);
 
 module.exports = router;

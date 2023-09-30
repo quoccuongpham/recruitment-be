@@ -63,7 +63,7 @@ exports.findJob = async (req, res) => {
 exports.findAllCompany = async (req, res) => {
     const company = await db.sequelize.model("company").findAll();
     res.json(company);
-}
+};
 
 exports.applyJob = async (req, res) => {
     try {
@@ -72,18 +72,39 @@ exports.applyJob = async (req, res) => {
         const job_apply = db.sequelize.model("job_post_activity").build({
             user_account_id: user_info.id,
             job_post_id: req.body.id_job,
-            apply_date: current_time
-        })
+            apply_date: current_time,
+        });
         await job_apply.save();
         return res.json({
             success: true,
-            message: "apply job successfully"
+            message: "apply job successfully",
         });
     } catch (e) {
         console.log(e);
         return res.status(500).json({
             success: false,
-            message: "Internal error"
-        })
+            message: "Internal error",
+        });
     }
-}
+};
+
+exports.getProfile = async (req, res) => {
+    const user_info = req.user_info;
+    let seekerInfo = db.sequelize
+        .model("seeker_profile")
+        .findOne({ where: { user_account_id: user_info.id } });
+    let educationInfo = db.sequelize
+        .model("education_detail")
+        .findOne({ where: { user_account_id: user_info.id } });
+    let experienceInfo = db.sequelize
+        .model("experience_detail")
+        .findOne({ where: { user_account_id: user_info.id } });
+
+    Promise.all([seekerInfo, educationInfo, experienceInfo])
+        .then((values) => {
+            return res.json([user_info, ...values]);
+        })
+        .catch((err) => {
+            return res.json(err);
+        });
+};
