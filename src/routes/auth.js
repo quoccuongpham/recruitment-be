@@ -2,6 +2,7 @@ const router = require("express").Router();
 const argon = require("argon2");
 const jwt = require("jsonwebtoken");
 const db = require("../../database/models/index");
+const controller = require("../controllers/auth.controller");
 
 const Response = require("../utils/Response");
 router.post("/login", async (req, res) => {
@@ -110,4 +111,6 @@ router.get("/", async (req, res) => {
         }
     }
 });
+
+router.get("/logout", controller.logout);
 module.exports = router;

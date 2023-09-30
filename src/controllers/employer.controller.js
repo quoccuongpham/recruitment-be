@@ -1,3 +1,3 @@
-export.findWorker = (req,res) => {
+exports.findWorker = (req, res) => {
     res.json("findWorker");
-}
+};
