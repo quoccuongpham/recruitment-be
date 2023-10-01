@@ -18,6 +18,9 @@ app.use(bodyParser.json());
 app.use(
     cors({ origin: true, credentials: true, exposedHeaders: ["set-cookie"] })
 );
+// public
+app.use("/public/upload/avatar", express.static("./public/upload/avatar"));
+
 // routes
 app.use("/auth", auth);
 app.use("/employer", employer);

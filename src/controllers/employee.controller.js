@@ -108,3 +108,24 @@ exports.getProfile = async (req, res) => {
             return res.json(err);
         });
 };
+
+exports.uploadAvatar = async (req, res) => {
+    try {
+        // Đọc tệp hình ảnh đã tải lên
+        const imageFile = fs.readFileSync(req.file.path);
+
+        // Chuyển đổi tệp hình ảnh thành dạng dữ liệu nhị phân
+        const imageBinaryData = Buffer.from(imageFile).toString("base64");
+
+        // Lưu dữ liệu nhị phân vào cơ sở dữ liệu PostgreSQL
+        const values = [req.file.originalname, imageBinaryData];
+
+        res.status(200).json({
+            message: "Hình ảnh đã được tải lên và lưu vào cơ sở dữ liệu.",
+            values,
+        });
+    } catch (error) {
+        console.error("Lỗi:", error);
+        res.status(500).json({ error: "Đã có lỗi xảy ra khi xử lý hình ảnh." });
+    }
+};
