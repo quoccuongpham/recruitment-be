@@ -47,7 +47,7 @@ module.exports = function (sequelize, DataTypes) {
                 allowNull: false,
             },
             job_description: {
-                type: DataTypes.STRING(500),
+                type: DataTypes.TEXT,
                 allowNull: false,
             },
             job_location_id: {

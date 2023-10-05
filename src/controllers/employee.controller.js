@@ -23,6 +23,12 @@ exports.findJob = async (req, res) => {
             id: company_id,
         },
     });
+    const apply_list = await db.sequelize.model("job_post_activity").findAll({
+        where: {
+            user_account_id: req.user_info.id,
+            job_post_id: id,
+        },
+    });
     const job_type = db.sequelize
         .model("job_type")
         .findOne({ where: { id: job_type_id } });
@@ -50,6 +56,7 @@ exports.findJob = async (req, res) => {
                 company_name,
                 job_type_name,
                 job_location_string,
+                isApply: apply_list.length !== 0,
             });
         })
         .catch((err) => {
@@ -129,5 +136,3 @@ exports.uploadAvatar = async (req, res) => {
         res.status(500).json({ error: "Đã có lỗi xảy ra khi xử lý hình ảnh." });
     }
 };
-
-
