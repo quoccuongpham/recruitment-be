@@ -3,6 +3,7 @@ const db = require("../../database/models/index");
 const jwt = require("jsonwebtoken");
 const Response = require("../utils/Response");
 const check_cookie = require("../middleware/check_cookie");
+const controller = require("../controllers/employer.controller");
 
 // create profile for company
 router.post("/create", check_cookie, async (req, res) => {
@@ -82,5 +83,7 @@ router.get("/job-posted", check_cookie, async (req, res) => {
         new Response(true, "Get job posted successfully", job_posted)
     );
 });
+
+router.route("/job-apply/:id").get(check_cookie, controller.getApply);
 
 module.exports = router;
