@@ -1,8 +1,33 @@
 const db = require("../../database/models/index");
 
 exports.findAllJob = async (req, res) => {
-    const jobs = await db.sequelize.model("job_post").findAll();
-    res.json(jobs);
+    try {
+        const jobs = await db.sequelize.model("job_post").findAll();
+        const get_company_promise = jobs.map((job) => {
+            return db.sequelize.model("company").findOne({
+                where: {
+                    id: job.dataValues.company_id,
+                },
+            });
+        });
+
+        Promise.all(get_company_promise).then((values) => {
+            const company_name = values.map((company) => {
+                return company.dataValues.company_name;
+            });
+            for (let i = 0; i < jobs.length; i++) {
+                jobs[i].dataValues.company_name = company_name[i];
+            }
+
+            return res.json(jobs);
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal error",
+        });
+    }
 };
 
 exports.findJob = async (req, res) => {
