@@ -127,10 +127,10 @@ exports.getProfile = async (req, res) => {
         .findOne({ where: { user_account_id: user_info.id } });
     let educationInfo = db.sequelize
         .model("education_detail")
-        .findOne({ where: { user_account_id: user_info.id } });
+        .findAll({ where: { user_account_id: user_info.id } });
     let experienceInfo = db.sequelize
         .model("experience_detail")
-        .findOne({ where: { user_account_id: user_info.id } });
+        .findAll({ where: { user_account_id: user_info.id } });
 
     Promise.all([seekerInfo, educationInfo, experienceInfo])
         .then((values) => {
