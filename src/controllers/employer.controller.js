@@ -17,7 +17,7 @@ exports.getApply = async (req, res) => {
 			return value.dataValues.user_account_id;
 		});
 		let user_apply = await db.sequelize.model("user_account").findAll({
-			attributes: ["user_image", "email", "contact_number"],
+			attributes: ["id", "user_image", "email", "contact_number"],
 			where: {
 				id: {
 					[Op.in]: apply,
