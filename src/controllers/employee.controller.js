@@ -141,6 +141,192 @@ exports.getProfile = async (req, res) => {
         });
 };
 
+exports.createProfile = async (req, res) => {
+    try {
+        const data = req.body;
+        const user_info = req.user_info;
+        const user_account = {
+            date_of_birth: data.date_of_birth,
+            gender: data.gender,
+        };
+        const seeker_profile = {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            current_salary: data.current_salary,
+            is_annually_monthly: data.is_annually_monthly == "on" ? "Y" : "N",
+            currency: data.currency == "on" ? "VND" : "Dolar",
+        };
+        let education = [];
+        let experience = [];
+        const temp = {
+            first_name: "Pham",
+            last_name: "Quoc Cuong",
+            current_salary: "3000000",
+            is_annually_monthly: "on",
+            currency: "on",
+            date_of_birth: "2002-02-17",
+            gender: "M",
+            cetificate_degree_name_0: "Kĩ sư",
+            major_0: "Công nghệ thông tin",
+            institute_university_name_0: "Cần Thơ University",
+            starting_date_0: "2020-10-10",
+            completion_date_0: "2024-10-10",
+            cgpa_0: "3.9",
+            percentage_0: "",
+            company_name_0: "Axon",
+            job_title_0: "Webdeveloper",
+            is_current_job_0: "on",
+            job_location_country_0: "Việt Nam",
+            job_location_state_0: "",
+            job_location_city_0: "Cần Thơ",
+            start_date_0: "2023-08-12",
+            end_date_0: "2023-09-12",
+            experience_lenght: "1",
+            education_lenght: "1",
+        };
+        for (let i = 0; i < Number.parseInt(data.education_lenght); i++) {
+            let education_temp = {
+                cetificate_degree_name: data[`cetificate_degree_name_${i}`],
+                major: data[`major_${i}`],
+                institute_university_name:
+                    data[`institute_university_name_${i}`],
+                completion_date: data[`completion_date_${i}`],
+                starting_date: data[`starting_date_${i}`],
+                percentage: data[`percentage_${i}`],
+                cgpa: data[`cgpa_${i}`],
+            };
+            education.push(education_temp);
+        }
+        for (let i = 0; i < Number.parseInt(data.experience_lenght); i++) {
+            let experience_temp = {
+                start_date: data[`start_date_${i}`],
+                end_date: data[`end_date_${i}`],
+                is_current_job: data[`is_current_job_${i}`] == "on" ? "Y" : "N",
+                job_title: data[`job_title_${i}`],
+                company_name: data[`company_name_${i}`],
+                job_location_city: data[`job_location_city_${i}`],
+                job_location_state: data[`job_location_state_${i}`],
+                job_location_country: data[`job_location_country_${i}`],
+                description: data[`description_${i}`],
+            };
+            experience.push(experience_temp);
+        }
+        education = education.map((value) => {
+            return Object.fromEntries(
+                Object.entries(value).filter(
+                    ([_, v]) => v != null && v != undefined && v != ""
+                )
+            );
+        });
+        experience = experience.map((value) => {
+            return Object.fromEntries(
+                Object.entries(value).filter(
+                    ([_, v]) => v != null && v != undefined && v != ""
+                )
+            );
+        });
+
+        // UPDATE DATA
+        await db.sequelize.model("user_account").update(user_account, {
+            where: {
+                id: user_info.id,
+            },
+        });
+        await db.sequelize.model("seeker_profile").update(seeker_profile, {
+            where: {
+                user_account_id: user_info.id,
+            },
+        });
+        education.forEach((value) => {
+            let list_keys = Object.keys(value);
+            if (
+                list_keys.includes("cetificate_degree_name") &&
+                list_keys.includes("major")
+            ) {
+                db.sequelize
+                    .model("education_detail")
+                    .findOne({
+                        where: {
+                            user_account_id: user_info.id,
+                            cetificate_degree_name:
+                                value.cetificate_degree_name,
+                            major: value.major,
+                        },
+                    })
+                    .then((rs) => {
+                        if (rs) {
+                            db.sequelize
+                                .model("education_detail")
+                                .update(value, {
+                                    where: {
+                                        user_account_id: user_info.id,
+                                        cetificate_degree_name:
+                                            value.cetificate_degree_name,
+                                        major: value.major,
+                                    },
+                                })
+                                .catch((err) => console.log(err));
+                        } else {
+                            db.sequelize
+                                .model("education_detail")
+                                .create({
+                                    user_account_id: user_info.id,
+                                    ...value,
+                                })
+                                .catch((err) => console.log(err));
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            }
+        });
+        experience.forEach((value) => {
+            let list_keys = Object.keys(value);
+            if (
+                list_keys.includes("start_date") &&
+                list_keys.includes("end_date")
+            ) {
+                db.sequelize
+                    .model("experience_detail")
+                    .findOne({
+                        where: {
+                            user_account_id: user_info.id,
+                            start_date: value.start_date,
+                            end_date: value.end_date,
+                        },
+                    })
+                    .then((rs) => {
+                        if (rs) {
+                            db.sequelize
+                                .model("education_detail")
+                                .update(value, {
+                                    where: {
+                                        user_account_id: user_info.id,
+                                        start_date: value.start_date,
+                                        end_date: value.end_date,
+                                    },
+                                })
+                                .catch((err) => console.log(err));
+                        } else {
+                            db.sequelize
+                                .model("education_detail")
+                                .create({
+                                    user_account_id: user_info.id,
+                                    ...value,
+                                })
+                                .catch((err) => console.log(err));
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            }
+        });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false });
+    }
+};
+
 exports.uploadAvatar = async (req, res) => {
     try {
         // Đọc tệp hình ảnh đã tải lên

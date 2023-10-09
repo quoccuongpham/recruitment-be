@@ -10,7 +10,10 @@ router.route("/company").get(controller.findAllJob);
 
 router.post("/apply", check_cookie, controller.applyJob);
 
-router.route("/profile").get(check_cookie, controller.getProfile);
+router
+    .route("/profile")
+    .get(check_cookie, controller.getProfile)
+    .post(check_cookie, controller.createProfile);
 
 const storage_avatar = multer.diskStorage({
     destination: (req, file, cb) => {
