@@ -14,6 +14,15 @@ class JobActivityService {
 			}
 		);
 	}
+
+	async get_job_apply_by_user(id) {
+		return await this.JobActivity.findAll({
+			where: {
+				user_account_id: id,
+			},
+			include: "job_post",
+		});
+	}
 }
 
 module.exports = JobActivityService;

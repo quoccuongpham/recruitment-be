@@ -1,4 +1,6 @@
 const db = require("../../database/models/index");
+const initModels = require("../../database/models/init-models");
+const JobActivityService = require("../service/JobActivity.service");
 
 exports.findAllJob = async (req, res) => {
 	try {
@@ -95,6 +97,18 @@ exports.findJob = async (req, res) => {
 exports.findAllCompany = async (req, res) => {
 	const company = await db.sequelize.model("company").findAll();
 	res.json(company);
+};
+
+exports.getApplyJob = async (req, res) => {
+	try {
+		const models = initModels(db.sequelize);
+		const JobActivity = new JobActivityService(models.job_post_activity);
+		const jobs = await JobActivity.get_job_apply_by_user(req.user_info.id);
+		return res.json(jobs);
+	} catch (error) {
+		console.log(error);
+		return res.end();
+	}
 };
 
 exports.applyJob = async (req, res) => {
