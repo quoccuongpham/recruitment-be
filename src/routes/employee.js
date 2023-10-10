@@ -3,7 +3,8 @@ const multer = require("multer");
 const check_cookie = require("../middleware/check_cookie");
 const controller = require("../controllers/employee.controller");
 const db = require("../../database/models/index");
-const initModels = require("../../database/models/init-models");
+const mailer = require("../utils/mailer");
+const mailtemplete = require("../utils/mailertemplete");
 router.route("/jobs").get(check_cookie, controller.findAllJob);
 router.route("/job-detail/:id").get(check_cookie, controller.findJob);
 router.route("/company").get(controller.findAllJob);
@@ -19,20 +20,8 @@ router
 
 router.get("/testroute", async (req, res) => {
 	try {
-		const models = initModels(db.sequelize);
-		const rs = await models.job_post_activity.findAll({
-			// include: { models: models.job_post, as: "user_account" },
-			include: "user_account",
-		});
-		// const rs = await db.sequelize.model("job_post_activity").findAll({
-		// 	include: [
-		// 		{
-		// 			model: db.sequelize.model("job_post"),
-		// 			attributes: ["user_account_id"],
-		// 		},
-		// 	],
-		// });
-		return res.json(rs);
+		mailer.sendMail("quoccuonga2st@gmail.com", "testmail", mailtemplete);
+		return res.json("success");
 	} catch (error) {
 		console.log(error);
 		res.end();

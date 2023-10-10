@@ -1,5 +1,7 @@
 const db = require("../../database/models/index");
 const { Op } = require("sequelize");
+const mailer = require("../utils/mailer");
+const mailTemplete = require("../utils/mailertemplete");
 const JobActivityService = require("../service/JobActivity.service");
 exports.findWorker = (req, res) => {
 	res.json("findWorker");
@@ -47,11 +49,11 @@ exports.getApply = async (req, res) => {
 		return res.status(500).json({ message: "Da co loi xay ra" });
 	}
 };
-
+// chap nhan don ung tuyen
 exports.accept_job = async (req, res) => {
 	const job_post_id = req.params.id;
-	const { user_account_id, is_accept } = req.body;
-	console.log(job_post_id, user_account_id, is_accept);
+	const { user_account_id, is_accept, email } = req.body;
+	console.log(job_post_id, user_account_id, is_accept, email);
 	try {
 		const JobActivity = new JobActivityService(
 			db.sequelize.model("job_post_activity")
@@ -61,6 +63,7 @@ exports.accept_job = async (req, res) => {
 			job_post_id,
 			is_accept
 		);
+		mailer.sendMail(email, "testmail", mailTemplete);
 		return res.json({ success: true, message: "accept successfully!" });
 	} catch (error) {
 		console.log(error);
