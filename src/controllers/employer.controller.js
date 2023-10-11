@@ -1,8 +1,11 @@
 const db = require("../../database/models/index");
+const initModels = require("../../database/models/init-models");
 const { Op } = require("sequelize");
 const mailer = require("../utils/mailer");
 const mailTemplete = require("../utils/mailertemplete");
 const JobActivityService = require("../service/JobActivity.service");
+const SeekerProfileService = require("../service/SeekerProfile.service");
+
 exports.findWorker = (req, res) => {
 	res.json("findWorker");
 };
@@ -68,5 +71,22 @@ exports.accept_job = async (req, res) => {
 	} catch (error) {
 		console.log(error);
 		return res.json({ success: false });
+	}
+};
+
+exports.getSeekerProfile = async (req, res) => {
+	try {
+		const models = initModels(db.sequelize);
+		const seeker_profile = new SeekerProfileService(
+			models.seeker_profile,
+			models.education_detail,
+			models.experience_detail,
+			models.user_account
+		);
+		const rs = await seeker_profile.get_profile_by_id(10);
+		return res.json(rs);
+	} catch (error) {
+		console.log(error);
+		return res.json("Da co loi xay ra");
 	}
 };

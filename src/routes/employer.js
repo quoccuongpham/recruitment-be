@@ -89,4 +89,5 @@ router
 	.get(check_cookie, controller.getApply)
 	.post(check_cookie, controller.accept_job);
 
+router.get("/seeker-profile", check_cookie, controller.getSeekerProfile);
 module.exports = router;
