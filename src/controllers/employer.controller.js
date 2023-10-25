@@ -55,8 +55,14 @@ exports.getApply = async (req, res) => {
 // chap nhan don ung tuyen
 exports.accept_job = async (req, res) => {
 	const job_post_id = req.params.id;
-	const { user_account_id, is_accept, email } = req.body;
-	console.log(job_post_id, user_account_id, is_accept, email);
+	const { user_account_id, is_accept, email, interviewMessage } = req.body;
+	console.log(
+		job_post_id,
+		user_account_id,
+		is_accept,
+		email,
+		interviewMessage
+	);
 	try {
 		const JobActivity = new JobActivityService(
 			db.sequelize.model("job_post_activity")
@@ -66,7 +72,7 @@ exports.accept_job = async (req, res) => {
 			job_post_id,
 			is_accept
 		);
-		mailer.sendMail(email, "testmail", mailTemplete);
+		mailer.sendMail(email, "testmail", mailTemplete(interviewMessage));
 		return res.json({ success: true, message: "accept successfully!" });
 	} catch (error) {
 		console.log(error);
@@ -83,7 +89,7 @@ exports.getSeekerProfile = async (req, res) => {
 			models.experience_detail,
 			models.user_account
 		);
-		const rs = await seeker_profile.get_profile_by_id(10);
+		const rs = await seeker_profile.get_profile_by_id(req.params.id);
 		return res.json(rs);
 	} catch (error) {
 		console.log(error);

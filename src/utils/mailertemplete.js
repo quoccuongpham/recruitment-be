@@ -1,4 +1,5 @@
-const mailTemplete = `
+function mailTemplete(message) {
+	return `
 <!DOCTYPE HTML
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -290,13 +291,8 @@ const mailTemplete = `
                                                             <div class="v-font-size"
                                                                 style="font-size: 14px; color: #444444; line-height: 170%; text-align: center; word-wrap: break-word;">
                                                                 <p style="font-size: 14px; line-height: 170%;"><span
-                                                                        style="font-size: 16px; line-height: 27.2px;">Lorem
-                                                                        ipsum dolor sit amet, consectetuer adipiscing
-                                                                        elit, sed diam nonummy nibh euismod tincidunt ut
-                                                                        laoreet dolore magna aliquam erat
-                                                                        volutpat. </span></p>
+                                                                        style="font-size: 16px; line-height: 27.2px;">Thời gian phỏng vấn: ${message} </span></p>
                                                             </div>
-
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -550,5 +546,6 @@ const mailTemplete = `
 
 </html>
 `;
+}
 
 module.exports = mailTemplete;
