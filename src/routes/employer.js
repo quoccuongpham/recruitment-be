@@ -90,4 +90,7 @@ router
 	.post(check_cookie, controller.accept_job);
 
 router.get("/seeker-profile/:id", check_cookie, controller.getSeekerProfile);
+
+// Profile cua nha tuyen dung
+router.route("/profile").get(check_cookie, controller.getProfile);
 module.exports = router;

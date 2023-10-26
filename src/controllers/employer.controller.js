@@ -5,6 +5,7 @@ const mailer = require("../utils/mailer");
 const mailTemplete = require("../utils/mailertemplete");
 const JobActivityService = require("../service/JobActivity.service");
 const SeekerProfileService = require("../service/SeekerProfile.service");
+const CompanyService = require("../service/Company.service");
 
 exports.findWorker = (req, res) => {
 	res.json("findWorker");
@@ -95,4 +96,66 @@ exports.getSeekerProfile = async (req, res) => {
 		console.log(error);
 		return res.json("Da co loi xay ra");
 	}
+};
+
+// lay profile cua tai khoan
+exports.getProfile = async (req, res) => {
+	const { user_info } = req;
+	if (user_info.user_type_id === 2) {
+		try {
+			const {
+				email,
+				date_of_birth,
+				gender,
+				contact_number,
+				user_image,
+				registration_date,
+			} = user_info;
+			const models = initModels(db.sequelize);
+			const company_service = new CompanyService({
+				CompanyModel: models.company,
+				CompanyImageModel: models.company_image,
+			});
+			const rs = await company_service.getCompanyInfoByUserAccount(
+				user_info.id
+			);
+			const {
+				dataValues: {
+					id,
+					user_account_id,
+					company_name,
+					profile_description,
+					establishment_date,
+					company_website_url,
+					company_images,
+				},
+			} = rs;
+			const data = {
+				email,
+				date_of_birth,
+				gender,
+				contact_number,
+				user_image,
+				registration_date,
+				id,
+				user_account_id,
+				company_name,
+				profile_description,
+				establishment_date,
+				company_website_url,
+				company_images,
+			};
+			return res.json({
+				success: true,
+				dataValues: data,
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+				success: false,
+				message: "Da co loi xay ra",
+			});
+		}
+	}
+	return res.json({ success: false });
 };
