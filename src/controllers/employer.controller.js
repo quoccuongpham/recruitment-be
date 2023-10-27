@@ -119,8 +119,25 @@ exports.getProfile = async (req, res) => {
 			const rs = await company_service.getCompanyInfoByUserAccount(
 				user_info.id
 			);
-			const {
-				dataValues: {
+			if (rs != null) {
+				const {
+					dataValues: {
+						id,
+						user_account_id,
+						company_name,
+						profile_description,
+						establishment_date,
+						company_website_url,
+						company_images,
+					},
+				} = rs;
+				const data = {
+					email,
+					date_of_birth,
+					gender,
+					contact_number,
+					user_image,
+					registration_date,
 					id,
 					user_account_id,
 					company_name,
@@ -128,26 +145,15 @@ exports.getProfile = async (req, res) => {
 					establishment_date,
 					company_website_url,
 					company_images,
-				},
-			} = rs;
-			const data = {
-				email,
-				date_of_birth,
-				gender,
-				contact_number,
-				user_image,
-				registration_date,
-				id,
-				user_account_id,
-				company_name,
-				profile_description,
-				establishment_date,
-				company_website_url,
-				company_images,
-			};
+				};
+				return res.json({
+					success: true,
+					dataValues: data,
+				});
+			}
 			return res.json({
 				success: true,
-				dataValues: data,
+				dataValues: {},
 			});
 		} catch (error) {
 			console.log(error);

@@ -7,7 +7,7 @@ class CompanyService {
 	async getCompanyInfoByUserAccount(id) {
 		return await this.Company.findOne({
 			where: {
-				user_account_id: id,
+				id: id,
 			},
 			include: [
 				{
@@ -17,6 +17,16 @@ class CompanyService {
 				},
 			],
 		});
+	}
+
+	async createOrUpdateCompanyProfile(id, data) {
+		try {
+			const company = this.Company.findOne({
+				where: {
+					user_account_id: id,
+				},
+			});
+		} catch (error) {}
 	}
 }
 
