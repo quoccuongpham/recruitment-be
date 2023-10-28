@@ -84,8 +84,6 @@ function initModels(sequelize) {
 		as: "companies",
 		foreignKey: "id",
 	});
-	job_post.belongsTo(company, { as: "company", foreignKey: "company_id" });
-	company.hasMany(job_post, { as: "job_posts", foreignKey: "company_id" });
 	job_post.belongsTo(job_location, {
 		as: "job_location",
 		foreignKey: "job_location_id",

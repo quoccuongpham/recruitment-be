@@ -17,6 +17,10 @@ module.exports = function (sequelize, DataTypes) {
 				type: DataTypes.STRING(100),
 				allowNull: false,
 			},
+			company_email: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
 			profile_description: {
 				type: DataTypes.STRING(1000),
 				allowNull: false,

@@ -60,7 +60,6 @@ router.post("/create-job", check_cookie, async (req, res) => {
 	const result_create_location = await JobLocation.save();
 	const JobPost = db.sequelize.model("job_post").build({
 		post_by_id: user_info.id,
-		company_id: company_info.dataValues.id,
 		job_title,
 		job_description,
 		job_location_id: result_create_location.dataValues.id,
@@ -92,5 +91,8 @@ router
 router.get("/seeker-profile/:id", check_cookie, controller.getSeekerProfile);
 
 // Profile cua nha tuyen dung
-router.route("/profile").get(check_cookie, controller.getProfile);
+router
+	.route("/profile")
+	.get(check_cookie, controller.getProfile)
+	.post(check_cookie, controller.createProfile);
 module.exports = router;

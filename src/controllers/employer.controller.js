@@ -165,3 +165,17 @@ exports.getProfile = async (req, res) => {
 	}
 	return res.json({ success: false });
 };
+exports.createProfile = async (req, res) => {
+	try {
+		const models = initModels(db.sequelize);
+		const company_service = new CompanyService({
+			CompanyModel: models.company,
+			CompanyImageModel: models.company_image,
+		});
+		const rs = await company_service.createOrUpdateCompanyProfile(8);
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.json({ success: true });
+	}
+};

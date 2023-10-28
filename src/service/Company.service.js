@@ -21,12 +21,20 @@ class CompanyService {
 
 	async createOrUpdateCompanyProfile(id, data) {
 		try {
-			const company = this.Company.findOne({
-				where: {
-					user_account_id: id,
-				},
-			});
-		} catch (error) {}
+			const companyInfo = await this.getCompanyInfoByUserAccount(id);
+			console.table(companyInfo, ["dataValues"]);
+			if (companyInfo) {
+				// update
+				console.log("update");
+				return companyInfo;
+			} else {
+				// tao moi
+				return "tao moi";
+			}
+		} catch (error) {
+			console.log(error);
+			return {};
+		}
 	}
 }
 
