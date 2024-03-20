@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       references: {
         model: 'seeker_profile',
-        key: 'user_acount_id'
+        key: 'user_account_id'
       },
       unique: "seeker_skill_set_user_account_id_key"
     },

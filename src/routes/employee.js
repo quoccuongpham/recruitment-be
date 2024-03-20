@@ -5,17 +5,26 @@ const controller = require("../controllers/employee.controller");
 const db = require("../../database/models/index");
 const mailer = require("../utils/mailer");
 const mailtemplete = require("../utils/mailertemplete");
+
+// get all job
 router.route("/jobs").get(check_cookie, controller.findAllJob);
+
+// find job
 router.route("/job-detail/:id").get(check_cookie, controller.findJob);
+
 router.route("/company").get(controller.findAllJob);
 
 router
 	.route("/apply")
+	// cac job da apply
 	.get(check_cookie, controller.getApplyJob)
+	// apply job
 	.post(check_cookie, controller.applyJob);
 router
 	.route("/profile")
+	// lay thong tin profile
 	.get(check_cookie, controller.getProfile)
+	// tao profile
 	.post(check_cookie, controller.createProfile);
 
 router.get("/testroute", async (req, res) => {
@@ -27,6 +36,7 @@ router.get("/testroute", async (req, res) => {
 		res.end();
 	}
 });
+
 const storage_avatar = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, "./public/upload/avatar");

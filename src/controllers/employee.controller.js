@@ -20,7 +20,6 @@ exports.findAllJob = async (req, res) => {
 			for (let i = 0; i < jobs.length; i++) {
 				jobs[i].dataValues.company_name = company_name[i];
 			}
-
 			return res.json(jobs);
 		});
 	} catch (error) {

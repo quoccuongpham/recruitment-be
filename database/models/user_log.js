@@ -18,6 +18,10 @@ module.exports = function(sequelize, DataTypes) {
     last_job_apply_date: {
       type: DataTypes.DATEONLY,
       allowNull: true
+    },
+    save_job: {
+      type: DataTypes.JSON,
+      allowNull: true
     }
   }, {
     sequelize,
